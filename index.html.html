@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Monthsary</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff9a9e, #fecfef);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .container {
+      text-align: center;
+      color: #fff;
+      max-width: 90%;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 15px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      animation: fadeIn 3s ease forwards;
+    }
+
+    @media (min-width: 768px) {
+      h1 { font-size: 3.2rem; }
+      p { font-size: 1.4rem; }
+    }
+
+    .btns { margin-top: 20px; }
+
+    button {
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 10px;
+      transition: 0.3s ease;
+    }
+
+    #yesBtn { background: #ff6f91; color: #fff; }
+    #yesBtn:hover { transform: scale(1.1); }
+
+    #noBtn { background: #ffffff; color: #ff6f91; position: relative; }
+    #noBtn:hover {
+      position: absolute;
+      left: calc(50% - 100px + (Math.random() * 200px));
+      top: calc(50% - 50px + (Math.random() * 100px));
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -10px;
+      color: #ff6f91;
+      font-size: 20px;
+      animation: rise 5s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
+    }
+
+    .firework {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(8); }
+    }
+
+    #loveMessage {
+        display: none;
+        font-size: 1.6rem;
+        padding: 25px;
+        background: rgba(255, 255, 255, 0.25);
+        border-radius: 15px;
+        backdrop-filter: blur(6px);
+        animation: fadeIn 2s ease forwards, sparkle 2s infinite;
+        text-shadow: 0 0 10px #fff, 0 0 20px pink;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; }
+      50% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .flower {
+      position: fixed;
+      width: 40px;
+      animation: fall 6s linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(120vh) rotate(360deg); }
+    }
+
+    #sadVideo {
+      display: none;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 15px;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    body.yes-bg {
+      background: url('bg.jpg') center/cover no-repeat fixed !important;
+    }
+
+    body.yes-bg::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(3px);
+      background: rgba(0,0,0,0.4);
+      z-index: -1;
+    }
+
+    @keyframes fadeInScale {
+      0% { opacity:0; transform:scale(0.7); }
+      100% { opacity:1; transform:scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="mainContent">
+    <img src="https://media.tenor.com/eiMqmu0vXz8AAAAj/kiss.gif"/>
+    <h1>Happy Monthsary, My Love ❤️</h1>
+    <p id="question">You make my world brighter every single day. Will you stay in love with me forever?</p>
+
+    <div class="btns">
+      <button id="yesBtn">Yes 💖</button>
+      <button id="noBtn">No 😢</button>
+    </div>
+  </div>
+
+  <div id="loveWrapper" 
+     style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 5px;
+     ">
+
+    <div id="loveMessage">
+      🌸 My Love... Thank you for choosing me. Every moment with you feels magical.
+      <br><br>
+      💖✨ You are my heart, my happiness, my forever. 💐
+    </div>
+
+    <button id="memoriesBtn"
+      style="
+        display:none;
+        padding:12px 25px;
+        font-size:1.1rem;
+        border:none;
+        border-radius:25px;
+        background:#ff6f91;
+        color:white;
+        margin-top:20px;
+      ">
+      Our Memories 📸
+    </button>
+
+</div>
+
+  <div id="gallery" style="display:none; text-align:center; margin-top:20px;"></div>
+
+  <img id="sadVideo" src="https://clipart-library.com/2024/clip-person-crying-gif/clip-person-crying-gif-2.gif" />
+
+
+<script>
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const question = document.getElementById('question');
+const mainContent = document.getElementById('mainContent');
+const loveMessage = document.getElementById('loveMessage');
+const sadVideo = document.getElementById('sadVideo');
+
+const memoriesBtn = document.getElementById('memoriesBtn');
+const gallery = document.getElementById('gallery');
+const photos = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg'];
+
+const bgm = new Audio("https://cdn.pixabay.com/audio/2025/03/11/audio_af0a8e3aad.mp3");
+bgm.loop = true;
+
+// YES BUTTON
+yesBtn.addEventListener('click', () => {
+  bgm.play();
+  document.body.classList.add('yes-bg');
+  mainContent.style.display = 'none';
+  loveMessage.style.display = 'block';
+  memoriesBtn.style.display = 'inline-block';
+
+  // Fireworks
+  for (let i = 0; i < 25; i++) {
+    const fw = document.createElement('div');
+    fw.classList.add('firework');
+    fw.style.left = Math.random() * window.innerWidth + 'px';
+    fw.style.top = Math.random() * window.innerHeight + 'px';
+    fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    document.body.appendChild(fw);
+    setTimeout(() => fw.remove(), 1000);
+  }
+
+});
+
+
+// NO BUTTON LOGIC
+let noClicks = 0;
+noBtn.addEventListener('click', () => {
+  noClicks++;
+
+  if (noClicks === 1) {
+    question.innerHTML = "Are you sure my love? 😢";
+    noBtn.innerHTML = "Yes I'm sure 💔";
+  } 
+  else if (noClicks === 2) {
+    question.innerHTML = "Are you really really sure? 🥺";
+    noBtn.innerHTML = "I'm still sure 😭";
+  } 
+  else {
+    mainContent.style.display = 'none';
+    sadVideo.style.display = 'block';
+  }
+});
+
+
+
+// MEMORIES BUTTON — POLAROID COLLAGE STYLE
+memoriesBtn.addEventListener('click', () => {
+
+  loveMessage.style.display = 'none';
+  memoriesBtn.style.display = 'none';
+  gallery.style.display = 'block';
+
+  gallery.style.position = 'fixed';
+  gallery.style.top = '0';
+  gallery.style.left = '0';
+  gallery.style.width = '100%';
+  gallery.style.height = '100%';
+  gallery.style.overflow = 'hidden';
+  gallery.style.pointerEvents = 'none';
+
+  let index = 0;
+
+  function showNextImage() {
+    const img = document.createElement('img');
+    img.src = photos[index];
+    img.style.position = 'absolute';
+    img.style.width = '220px';
+    img.style.maxWidth = '70vw';
+    img.style.border = '12px solid white';
+    img.style.borderRadius = '12px';
+    img.style.boxShadow = '0 8px 20px rgba(0,0,0,0.3)';
+    img.style.opacity = '0';
+
+    // RANDOM POSITION — BUT ALWAYS FULLY VISIBLE ON MOBILE
+    let x = Math.random() * (window.innerWidth - 250);
+    let y = Math.random() * (window.innerHeight - 250);
+
+    img.style.left = x + 'px';
+    img.style.top = y + 'px';
+    img.style.transform = "rotate(" + (Math.random() * 40 - 20) + "deg)";
+    img.style.transition = "all 1.2s ease";
+
+    gallery.appendChild(img);
+
+    setTimeout(() => {
+      img.style.opacity = '1';
+      img.style.transform += ' scale(1)';
+    }, 50);
+
+    index++;
+
+    if (index < photos.length) {
+      setTimeout(showNextImage, 2200);
+    } else {
+      // AFTER LAST IMAGE — SHOW CENTERED MESSAGE
+      setTimeout(() => {
+        const msg = document.createElement('div');
+        msg.innerHTML = 
+          "💖 Thank you my love... every memory with you is a treasure.<br><br>" +
+          "💞 And we will make more beautiful memories together, forever my love. 💞";
+
+        msg.style.position = 'fixed';
+        msg.style.top = '50%';
+        msg.style.left = '50%';
+        msg.style.transform = 'translate(-50%, -50%)';
+        msg.style.padding = '20px 25px';
+        msg.style.fontSize = '1.4rem';
+        msg.style.color = '#fff';
+        msg.style.textAlign = 'center';
+        msg.style.maxWidth = '90%';
+        msg.style.lineHeight = '1.5';
+        msg.style.borderRadius = '15px';
+        msg.style.zIndex = '99999';
+        msg.style.background = 'rgba(0,0,0,0.55)';
+        msg.style.backdropFilter = 'blur(8px)';
+        msg.style.textShadow = '0 0 10px pink, 0 0 20px #ffb6c1';
+        msg.style.animation = 'fadeInScale 1.5s ease forwards';
+
+        gallery.appendChild(msg);
+
+      }, 2500);
+    }
+  }
+
+  showNextImage();
+});
+
+
+
+// FLOATING HEARTS
+setInterval(() => {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.innerHTML = '❤';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.fontSize = (20 + Math.random() * 20) + 'px';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}, 300);
+
+</script>
+</body>
+</html>
